@@ -7,9 +7,24 @@ package eddystone
 // Eddystone Service UUID
 const SvcUUID = 0xFEAA
 
-// Eddystone Frame Type
+// FrameType for Eddystone frames
+type FrameType byte
+
+func (ft FrameType) String() string {
+	switch ft {
+	case FtUID:
+		return "Eddystone-UID"
+	case FtURL:
+		return "Eddystone-URL"
+	case FtTLM:
+		return "Eddystone-TLM"
+	}
+	return "Invaild Frame"
+}
+
+// Eddystone frame types
 const (
-	FtUID = 0x00
-	FtURL = 0x10
-	FtTLM = 0x20
+	FtUID FrameType = 0x00
+	FtURL           = 0x10
+	FtTLM           = 0x20
 )

@@ -4,3 +4,7 @@
 
 // Package eddystone provides tools for making eddystone frame
 package eddystone
+
+import "errors"
+
+var errNotImplemented = errors.New("not implemented")
