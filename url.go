@@ -53,3 +53,50 @@ func encodeURL(u string) (byte, []byte, error) {
 
 	return prefix, []byte(u), nil
 }
+
+func decodeURL(prefix byte, encodedURL []byte) (string, error) {
+	p := []string{
+		"http://www.",
+		"https://www.",
+		"http://",
+		"https://",
+	}
+
+	if int(prefix) >= len(p) {
+		return "", errors.New("invaild prefix")
+	}
+
+	s := p[prefix]
+
+	m := []string{
+		".com/",
+		".org/",
+		".edu/",
+		".net/",
+		".info/",
+		".biz/",
+		".gov/",
+		".com",
+		".org",
+		".edu",
+		".net",
+		".info",
+		".biz",
+		".gov",
+	}
+
+	for _, b := range encodedURL {
+		switch {
+		case 0x00 <= b && b <= 0x13:
+			s += m[b]
+		case 0x0e <= b && b <= 0x20:
+			fallthrough
+		case 0x7f <= b && b <= 0xff:
+			return "", errors.New("invalid byte")
+		default:
+			s += string(b)
+		}
+	}
+
+	return s, nil
+}
