@@ -5,7 +5,6 @@
 package eddystone
 
 // fixed point representation : https://courses.cit.cornell.edu/ee476/Math/
-
 func float32ToFix(a float32) uint16 {
 	return uint16(a * 256)
 }
@@ -15,4 +14,20 @@ func fixTofloat32(a uint16) float32 {
 		return float32(a) / 256.0
 	}
 	return -(float32(^a) + 1) / 256.0
+}
+
+func uint16ToBytes(a uint16) []byte {
+	v := make([]byte, 2)
+	v[0] = byte(a >> 8)
+	v[1] = byte(a)
+	return v
+}
+
+func uint32ToBytes(a uint32) []byte {
+	v := make([]byte, 4)
+	v[0] = byte(a >> 24)
+	v[1] = byte(a >> 16)
+	v[2] = byte(a >> 8)
+	v[3] = byte(a)
+	return v
 }

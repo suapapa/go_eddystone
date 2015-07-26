@@ -42,3 +42,15 @@ func TestFixToFloat32(t *testing.T) {
 		}
 	}
 }
+
+func TestUintToBytes(t *testing.T) {
+	v := uint16ToBytes(uint16(0x0102))
+	if v[0] != 0x01 || v[1] != 0x02 {
+		t.Errorf("failed to convert uint16 to byte")
+	}
+
+	v = uint32ToBytes(uint32(0x01020304))
+	if v[0] != 0x01 || v[1] != 0x02 || v[2] != 0x03 || v[3] != 0x04 {
+		t.Errorf("failed to convert uint16 to byte")
+	}
+}
