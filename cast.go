@@ -31,3 +31,32 @@ func uint32ToBytes(a uint32) []byte {
 	v[3] = byte(a)
 	return v
 }
+
+func bytesToUint16(a []byte) (v uint16) {
+	if len(a) != 2 {
+		panic("invalid input")
+	}
+
+	v = uint16(a[0])<<8 | uint16(a[1])
+	return
+}
+
+func bytesToUint32(a []byte) (v uint32) {
+	if len(a) != 4 {
+		panic("invalid input")
+	}
+	v = uint32(a[0])<<24 | uint32(a[1])<<16 | uint32(a[2])<<8 | uint32(a[3])
+	return 0
+}
+
+func intToByte(a int) byte {
+	return byte(a & 0xff)
+}
+
+func byteToInt(a byte) (v int) {
+	v = int(a)
+	if v&0x80 != 0 {
+		v = -((^v + 1) & 0xff)
+	}
+	return
+}

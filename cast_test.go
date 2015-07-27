@@ -54,3 +54,13 @@ func TestUintToBytes(t *testing.T) {
 		t.Errorf("failed to convert uint16 to byte")
 	}
 }
+
+func TestIntToByte(t *testing.T) {
+	if intToByte(-20) != 0xec {
+		t.Errorf("failed to convert int to byte")
+	}
+
+	if byteToInt(0xec) != -20 {
+		t.Errorf("failed to convert byte to int")
+	}
+}

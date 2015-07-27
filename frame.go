@@ -17,7 +17,7 @@ type Frame []byte
 func NewUIDFrame(namespace, instance []byte, txPwr int) (Frame, error) {
 	f := make(Frame, 20)
 	f[0] = byte(FtUID)
-	f[1] = byte(txPwr & 0xFF)
+	f[1] = intToByte(txPwr)
 	copy(f[2:], namespace[:10+1])
 	copy(f[12:], instance[:6+1])
 	return f, nil
@@ -33,7 +33,7 @@ func NewURLFrame(url string, txPwr int) (Frame, error) {
 
 	f := make(Frame, 4)
 	f[0] = byte(FtURL)
-	f[1] = byte(txPwr & 0xFF)
+	f[1] = intToByte(txPwr)
 	f[2] = p
 	f[3] = byte(len(u))
 
@@ -44,16 +44,21 @@ func NewURLFrame(url string, txPwr int) (Frame, error) {
 
 // NewTLMFrame makes Eddystone-TLM frame
 // https://github.com/google/eddystone/tree/master/eddystone-tlm
-func NewTLMFrame(url string) Frame {
-	panic(errNotImplemented)
+func NewTLMFrame(batt uint16, temp float32, advCnt, secCnt uint32) (Frame, error) {
+	f := make(Frame, 2)
+	f[0] = byte(FtTLM)
+	f[1] = 0x00 // TLM version
+
+	f = append(f, uint16ToBytes(batt)...)
+	f = append(f, uint16ToBytes(float32ToFix(temp))...)
+	f = append(f, uint32ToBytes(advCnt)...)
+	f = append(f, uint32ToBytes(secCnt)...)
+
+	return f, nil
 }
 
 func (f Frame) String() string {
-	t, p := FrameType(f[0]), int(f[1])
-
-	if p&0x80 != 0 {
-		p = ^p + 1
-	}
+	t := FrameType(f[0])
 
 	switch t {
 	case FtUID:
@@ -61,7 +66,7 @@ func (f Frame) String() string {
 			t,
 			hex.EncodeToString(f[2:2+10+1]),
 			hex.EncodeToString(f[12:12+6+1]),
-			p,
+			byteToInt(f[1]),
 		)
 	case FtURL:
 		url, err := decodeURL(f[2], f[4:f[3]+1])
@@ -72,10 +77,16 @@ func (f Frame) String() string {
 		return fmt.Sprintf("%s[Url:0x%s TxPwr:%ddBm]",
 			t,
 			url,
-			p,
+			byteToInt(f[1]),
 		)
 	case FtTLM:
-		panic(errNotImplemented)
+		return fmt.Sprintf("%s[batt:%d temp:%f, advCnt:%d secCnt:%d]",
+			t,
+			bytesToUint16(f[2:2+2+1]),
+			fixTofloat32(bytesToUint16(f[4:4+2+1])),
+			bytesToUint32(f[7:7+4+1]),
+			bytesToUint32(f[11:7+4+1]),
+		)
 	}
 
 	return t.String()
