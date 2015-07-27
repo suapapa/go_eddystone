@@ -14,12 +14,25 @@ type Frame []byte
 
 // NewUIDFrame makes Eddystone-UID frame
 // https://github.com/google/eddystone/tree/master/eddystone-uid
-func NewUIDFrame(namespace, instance []byte, txPwr int) (Frame, error) {
-	f := make(Frame, 20)
+func NewUIDFrame(namespace, instance string, txPwr int) (Frame, error) {
+	n, err := hexStringToBytes(namespace, 10)
+	if err != nil {
+		return nil, err
+	}
+
+	i, err := hexStringToBytes(instance, 6)
+	if err != nil {
+		return nil, err
+	}
+
+	f := make(Frame, 2, 20)
 	f[0] = byte(FtUID)
 	f[1] = intToByte(txPwr)
-	copy(f[2:], namespace[:10+1])
-	copy(f[12:], instance[:6+1])
+
+	f = append(f, n...)
+	f = append(f, i...)
+	f = append(f, 0x00, 0x00)
+
 	return f, nil
 }
 
@@ -31,7 +44,7 @@ func NewURLFrame(url string, txPwr int) (Frame, error) {
 		return nil, err
 	}
 
-	f := make(Frame, 4)
+	f := make(Frame, 4, 21)
 	f[0] = byte(FtURL)
 	f[1] = intToByte(txPwr)
 	f[2] = p
@@ -45,9 +58,11 @@ func NewURLFrame(url string, txPwr int) (Frame, error) {
 // NewTLMFrame makes Eddystone-TLM frame
 // https://github.com/google/eddystone/tree/master/eddystone-tlm
 func NewTLMFrame(batt uint16, temp float32, advCnt, secCnt uint32) (Frame, error) {
-	f := make(Frame, 2)
+	f := make(Frame, 2, 14)
 	f[0] = byte(FtTLM)
 	f[1] = 0x00 // TLM version
+
+	// TODO: check min mix for each items
 
 	f = append(f, uint16ToBytes(batt)...)
 	f = append(f, uint16ToBytes(float32ToFix(temp))...)
@@ -90,4 +105,10 @@ func (f Frame) String() string {
 	}
 
 	return t.String()
+}
+
+// Parse convert []byte to eddystone.Frame
+func Parse(s []byte) (Frame, error) {
+	// TODO:
+	return nil, errNotImplemented
 }

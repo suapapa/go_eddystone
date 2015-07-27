@@ -4,6 +4,11 @@
 
 package eddystone
 
+import (
+	"encoding/hex"
+	"errors"
+)
+
 // fixed point representation : https://courses.cit.cornell.edu/ee476/Math/
 func float32ToFix(a float32) uint16 {
 	return uint16(a * 256)
@@ -59,4 +64,21 @@ func byteToInt(a byte) (v int) {
 		v = -((^v + 1) & 0xff)
 	}
 	return
+}
+
+func hexStringToBytes(s string, size int) ([]byte, error) {
+	r, err := hex.DecodeString(s)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(r) > size {
+		return nil, errors.New("too long data")
+	}
+
+	if len(r) < size {
+		return append(make([]byte, size-len(r), size), r...), nil
+	}
+
+	return r, nil
 }

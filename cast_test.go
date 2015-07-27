@@ -4,7 +4,10 @@
 
 package eddystone
 
-import "testing"
+import (
+	"bytes"
+	"testing"
+)
 
 var testData = map[float32]uint16{
 	0.0:  0x0000,
@@ -56,11 +59,18 @@ func TestUintToBytes(t *testing.T) {
 }
 
 func TestIntToByte(t *testing.T) {
-	if intToByte(-20) != 0xec {
+	if intToByte(-18) != 0xee {
 		t.Errorf("failed to convert int to byte")
 	}
 
-	if byteToInt(0xec) != -20 {
+	if byteToInt(0xee) != -18 {
 		t.Errorf("failed to convert byte to int")
+	}
+}
+
+func TestHexStringToBytes(t *testing.T) {
+	b, _ := hexStringToBytes("0102", 4)
+	if !bytes.Equal([]byte{0x00, 0x00, 0x01, 0x02}, b) {
+		t.Errorf("failed to convert hexString to bytes")
 	}
 }
