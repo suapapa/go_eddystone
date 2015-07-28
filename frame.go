@@ -79,8 +79,8 @@ func (f Frame) String() string {
 	case FtUID:
 		return fmt.Sprintf("%s[Namespace:0x%s Instance:0x%s TxPwr:%ddBm]",
 			t,
-			hex.EncodeToString(f[2:2+10+1]),
-			hex.EncodeToString(f[12:12+6+1]),
+			hex.EncodeToString(f[2:2+10]),
+			hex.EncodeToString(f[12:12+6]),
 			byteToInt(f[1]),
 		)
 	case FtURL:
@@ -97,10 +97,10 @@ func (f Frame) String() string {
 	case FtTLM:
 		return fmt.Sprintf("%s[batt:%d temp:%f, advCnt:%d secCnt:%d]",
 			t,
-			bytesToUint16(f[2:2+2+1]),
-			fixTofloat32(bytesToUint16(f[4:4+2+1])),
-			bytesToUint32(f[7:7+4+1]),
-			bytesToUint32(f[11:7+4+1]),
+			bytesToUint16(f[2:2+2]),
+			fixTofloat32(bytesToUint16(f[4:4+2])),
+			bytesToUint32(f[7:7+4]),
+			bytesToUint32(f[11:7+4]),
 		)
 	}
 
