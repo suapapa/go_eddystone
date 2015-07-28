@@ -84,12 +84,12 @@ func (f Frame) String() string {
 			byteToInt(f[1]),
 		)
 	case FtURL:
-		url, err := decodeURL(f[2], f[4:f[3]+1])
+		url, err := decodeURL(f[2], f[4:4+f[3]])
 		if err != nil {
 			url = "invaild url frame: " + err.Error()
 		}
 
-		return fmt.Sprintf("%s[Url:0x%s TxPwr:%ddBm]",
+		return fmt.Sprintf("%s[Url:%s TxPwr:%ddBm]",
 			t,
 			url,
 			byteToInt(f[1]),

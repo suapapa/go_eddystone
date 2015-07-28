@@ -9,42 +9,42 @@ import (
 	"strings"
 )
 
-var urlSchemePrefix = map[string]byte{
-	"http://www.":  0x00,
-	"https://www.": 0x01,
-	"http://":      0x02,
-	"https://":     0x03,
+var urlSchemePrefix = []string{
+	"http://www.",
+	"https://www.",
+	"http://",
+	"https://",
 }
 
-var urlEncoding = map[string]byte{
-	".com/":  0x00,
-	".org/":  0x01,
-	".edu/":  0x02,
-	".net/":  0x03,
-	".info/": 0x04,
-	".biz/":  0x05,
-	".gov/":  0x06,
-	".com":   0x07,
-	".org":   0x08,
-	".edu":   0x09,
-	".net":   0x0a,
-	".info":  0x0b,
-	".biz":   0x0c,
-	".gov":   0x0d,
+var urlEncoding = []string{
+	".com/",
+	".org/",
+	".edu/",
+	".net/",
+	".info/",
+	".biz/",
+	".gov/",
+	".com",
+	".org",
+	".edu",
+	".net",
+	".info",
+	".biz",
+	".gov",
 }
 
 func encodeURL(u string) (byte, []byte, error) {
-	prefix := byte(0x02)
-	for k, v := range urlSchemePrefix {
-		if strings.HasPrefix(u, k) {
-			prefix = v
-			u = u[len(k):]
+	prefix := byte(0x02) // http://
+	for i, v := range urlSchemePrefix {
+		if strings.HasPrefix(u, v) {
+			prefix = byte(i)
+			u = u[len(v):]
 			break
 		}
 	}
 
-	for k, v := range urlEncoding {
-		u = strings.Replace(u, k, string(v), -1)
+	for i, v := range urlEncoding {
+		u = strings.Replace(u, v, string(byte(i)), -1)
 	}
 
 	if len(u) > 17 {
@@ -55,40 +55,16 @@ func encodeURL(u string) (byte, []byte, error) {
 }
 
 func decodeURL(prefix byte, encodedURL []byte) (string, error) {
-	p := []string{
-		"http://www.",
-		"https://www.",
-		"http://",
-		"https://",
-	}
-
-	if int(prefix) >= len(p) {
+	if int(prefix) >= len(urlSchemePrefix) {
 		return "", errors.New("invaild prefix")
 	}
 
-	s := p[prefix]
-
-	m := []string{
-		".com/",
-		".org/",
-		".edu/",
-		".net/",
-		".info/",
-		".biz/",
-		".gov/",
-		".com",
-		".org",
-		".edu",
-		".net",
-		".info",
-		".biz",
-		".gov",
-	}
+	s := urlSchemePrefix[prefix]
 
 	for _, b := range encodedURL {
 		switch {
 		case 0x00 <= b && b <= 0x13:
-			s += m[b]
+			s += urlEncoding[b]
 		case 0x0e <= b && b <= 0x20:
 			fallthrough
 		case 0x7f <= b && b <= 0xff:
