@@ -12,9 +12,9 @@ import (
 // Frame represent Eddystone frame
 type Frame []byte
 
-// NewUIDFrame makes Eddystone-UID frame
+// MakeUIDFrame makes Eddystone-UID frame
 // https://github.com/google/eddystone/tree/master/eddystone-uid
-func NewUIDFrame(namespace, instance string, txPwr int) (Frame, error) {
+func MakeUIDFrame(namespace, instance string, txPwr int) (Frame, error) {
 	n, err := hexStringToBytes(namespace, 10)
 	if err != nil {
 		return nil, err
@@ -36,9 +36,9 @@ func NewUIDFrame(namespace, instance string, txPwr int) (Frame, error) {
 	return f, nil
 }
 
-// NewURLFrame makes Eddystone-URL frame
+// MakeURLFrame makes Eddystone-URL frame
 // https://github.com/google/eddystone/tree/master/eddystone-url
-func NewURLFrame(url string, txPwr int) (Frame, error) {
+func MakeURLFrame(url string, txPwr int) (Frame, error) {
 	p, u, err := encodeURL(url)
 	if err != nil {
 		return nil, err
@@ -54,9 +54,9 @@ func NewURLFrame(url string, txPwr int) (Frame, error) {
 	return f, nil
 }
 
-// NewTLMFrame makes Eddystone-TLM frame
+// MakeTLMFrame makes Eddystone-TLM frame
 // https://github.com/google/eddystone/tree/master/eddystone-tlm
-func NewTLMFrame(batt uint16, temp float32, advCnt, secCnt uint32) (Frame, error) {
+func MakeTLMFrame(batt uint16, temp float32, advCnt, secCnt uint32) (Frame, error) {
 	f := make(Frame, 2, 14)
 	f[0] = byte(ftTLM)
 	f[1] = 0x00 // TLM version

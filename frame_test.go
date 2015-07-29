@@ -11,7 +11,7 @@ import (
 
 func TestURLFrame(t *testing.T) {
 	urlGoogle := "http://google.com/"
-	f, err := NewURLFrame(urlGoogle, -20)
+	f, err := MakeURLFrame(urlGoogle, -20)
 	if err != nil {
 		panic(err)
 	}
