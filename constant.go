@@ -11,15 +11,15 @@ const SvcUUID = 0xFEAA
 var SvcUUIDBytes = []byte{0xAA, 0xFE}
 
 // FrameType for Eddystone frames
-type FrameType byte
+type frameType byte
 
-func (ft FrameType) String() string {
+func (ft frameType) String() string {
 	switch ft {
-	case FtUID:
+	case ftUID:
 		return "Eddystone-UID"
-	case FtURL:
+	case ftURL:
 		return "Eddystone-URL"
-	case FtTLM:
+	case ftTLM:
 		return "Eddystone-TLM"
 	}
 	return "Invaild Frame"
@@ -27,7 +27,7 @@ func (ft FrameType) String() string {
 
 // Eddystone frame types
 const (
-	FtUID FrameType = 0x00
-	FtURL           = 0x10
-	FtTLM           = 0x20
+	ftUID frameType = 0x00
+	ftURL           = 0x10
+	ftTLM           = 0x20
 )

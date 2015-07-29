@@ -20,7 +20,6 @@ func TestURLFrame(t *testing.T) {
 		0x10, // FtURL
 		intToByte(-20),
 		0x02, // URL Scheme Prefix: http://
-		0x07, // Length
 		'g',  // 'g'
 		'o',  // 'o'
 		'o',  // 'o'
@@ -31,6 +30,6 @@ func TestURLFrame(t *testing.T) {
 	}
 
 	if !bytes.Equal([]byte(f), expect) {
-		t.Errorf("expect: %v, got:%v", []byte(f), expect)
+		t.Errorf("expect: %v, got:%v", expect, []byte(f))
 	}
 }
