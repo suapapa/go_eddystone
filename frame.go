@@ -98,8 +98,8 @@ func (f Frame) String() string {
 			t,
 			bytesToUint16(f[2:2+2]),
 			fixTofloat32(bytesToUint16(f[4:4+2])),
-			bytesToUint32(f[7:7+4]),
-			bytesToUint32(f[11:7+4]),
+			bytesToUint32(f[6:6+4]),
+			bytesToUint32(f[10:10+4]),
 		)
 	}
 

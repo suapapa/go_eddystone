@@ -51,7 +51,7 @@ func bytesToUint32(a []byte) (v uint32) {
 		panic("invalid input")
 	}
 	v = uint32(a[0])<<24 | uint32(a[1])<<16 | uint32(a[2])<<8 | uint32(a[3])
-	return 0
+	return
 }
 
 func intToByte(a int) byte {
