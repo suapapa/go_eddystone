@@ -7,6 +7,9 @@ package eddystone
 // Eddystone Service UUID
 const SvcUUID = 0xFEAA
 
+// Eddystone Service UUID in Little Endian format
+var SvcUUIDBytes = []byte{0xAA, 0xFE}
+
 // FrameType for Eddystone frames
 type FrameType byte
 
