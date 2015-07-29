@@ -71,6 +71,34 @@ func MakeTLMFrame(batt uint16, temp float32, advCnt, secCnt uint32) (Frame, erro
 	return f, nil
 }
 
+// MakeFrame convert []byte to eddystone.Frame
+func MakeFrame(r []byte) (Frame, error) {
+	if len(r) < 2 {
+		return nil, ErrInvalidFrame
+	}
+
+	switch frameType(r[0]) {
+	case ftUID:
+		if len(r) < 18 {
+			return nil, ErrInvalidFrame
+		}
+	case ftURL:
+		if len(r) < 4 {
+			return nil, ErrInvalidFrame
+		}
+		if _, err := decodeURL(r[2], r[3:]); err != nil {
+			return nil, err
+		}
+
+	case ftTLM:
+		if len(r) != 14 {
+			return nil, ErrInvalidFrame
+		}
+	}
+
+	return Frame(r), nil
+}
+
 func (f Frame) String() string {
 	t := frameType(f[0])
 
@@ -85,9 +113,8 @@ func (f Frame) String() string {
 	case ftURL:
 		url, err := decodeURL(f[2], f[3:])
 		if err != nil {
-			url = "invaild url frame: " + err.Error()
+			panic(err)
 		}
-
 		return fmt.Sprintf("%s[Url:%s TxPwr:%ddBm]",
 			t,
 			url,
@@ -104,10 +131,4 @@ func (f Frame) String() string {
 	}
 
 	return t.String()
-}
-
-// Parse convert []byte to eddystone.Frame
-func Parse(s []byte) (Frame, error) {
-	// TODO:
-	return nil, errNotImplemented
 }

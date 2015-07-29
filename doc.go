@@ -2,9 +2,5 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package eddystone provides tools for making eddystone frame
+// Package eddystone provides tools for making Eddystone frame
 package eddystone
-
-import "errors"
-
-var errNotImplemented = errors.New("not implemented")

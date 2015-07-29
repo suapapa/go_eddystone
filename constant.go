@@ -4,11 +4,16 @@
 
 package eddystone
 
+import "errors"
+
 // Eddystone Service UUID
 const SvcUUID = 0xFEAA
 
 // Eddystone Service UUID in Little Endian format
 var SvcUUIDBytes = []byte{0xAA, 0xFE}
+
+// ErrInvalidFrame can be returned from Make*Frame()
+var ErrInvalidFrame = errors.New("invalid frame")
 
 // FrameType for Eddystone frames
 type frameType byte
