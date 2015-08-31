@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"runtime"
 
 	"github.com/paypal/gatt"
 	"github.com/paypal/gatt/examples/option"
