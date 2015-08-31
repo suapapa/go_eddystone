@@ -28,7 +28,9 @@ func main() {
 
 	// Advertise as an Eddystone beacon
 	a := &gatt.AdvPacket{}
-	a.AppendFlags(advFlagGeneralDiscoverable | advFlagLEOnly)
+	if runtime.GOOS != "darwin" { // flag not set if darwin
+		a.AppendFlags(advFlagGeneralDiscoverable | advFlagLEOnly)
+	}
 	a.AppendField(advTypeAllUUID16, eddystone.SvcUUIDBytes)
 	a.AppendField(advTypeServiceData16, append(eddystone.SvcUUIDBytes, f...))
 
