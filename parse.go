@@ -1,6 +1,9 @@
 package eddystone
 
-import "encoding/hex"
+import (
+	"encoding/binary"
+	"encoding/hex"
+)
 
 type EddystoneType string
 
@@ -39,8 +42,8 @@ func ParseURLFrame(f []byte) (url string, txPower int, err error) {
 }
 
 func ParseTLMFrame(f []byte) (batt uint16, temp float32, advCnt uint32, secCnt uint32) {
-	return bytesToUint16(f[2 : 2+2]),
-		fixTofloat32(bytesToUint16(f[4 : 4+2])),
-		bytesToUint32(f[6 : 6+4]),
-		bytesToUint32(f[10 : 10+4])
+	return binary.BigEndian.Uint16(f[2 : 2+2]),
+		fixTofloat32(binary.BigEndian.Uint16(f[4 : 4+2])),
+		binary.BigEndian.Uint32(f[6 : 6+4]),
+		binary.BigEndian.Uint32(f[10 : 10+4])
 }

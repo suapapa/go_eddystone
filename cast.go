@@ -5,7 +5,6 @@
 package eddystone
 
 import (
-	"encoding/binary"
 	"encoding/hex"
 	"errors"
 )
@@ -20,14 +19,6 @@ func fixTofloat32(a uint16) float32 {
 		return float32(a) / 256.0
 	}
 	return -(float32(^a) + 1) / 256.0
-}
-
-func bytesToUint16(a []byte) (v uint16) {
-	return binary.BigEndian.Uint16(a)
-}
-
-func bytesToUint32(a []byte) (v uint32) {
-	return binary.BigEndian.Uint32(a)
 }
 
 func intToByte(a int) byte {

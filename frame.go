@@ -123,10 +123,10 @@ func (f Frame) String() string {
 	case ftTLM:
 		return fmt.Sprintf("%s[batt:%d temp:%f, advCnt:%d secCnt:%d]",
 			t,
-			bytesToUint16(f[2:2+2]),
-			fixTofloat32(bytesToUint16(f[4:4+2])),
-			bytesToUint32(f[6:6+4]),
-			bytesToUint32(f[10:10+4]),
+			binary.BigEndian.Uint16(f[2:2+2]),
+			fixTofloat32(binary.BigEndian.Uint16(f[4:4+2])),
+			binary.BigEndian.Uint32(f[6:6+4]),
+			binary.BigEndian.Uint32(f[10:10+4]),
 		)
 	}
 
