@@ -1,10 +1,11 @@
-// Copyright 2015, Homin Lee <homin.lee@suapapa.net>. All rights reserved.
+// Copyright 2015-2020, Homin Lee <homin.lee@suapapa.net>. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
 package eddystone
 
 import (
+	"encoding/binary"
 	"encoding/hex"
 	"errors"
 )
@@ -23,35 +24,22 @@ func fixTofloat32(a uint16) float32 {
 
 func uint16ToBytes(a uint16) []byte {
 	v := make([]byte, 2)
-	v[0] = byte(a >> 8)
-	v[1] = byte(a)
+	binary.BigEndian.PutUint16(v, a)
 	return v
 }
 
 func uint32ToBytes(a uint32) []byte {
 	v := make([]byte, 4)
-	v[0] = byte(a >> 24)
-	v[1] = byte(a >> 16)
-	v[2] = byte(a >> 8)
-	v[3] = byte(a)
+	binary.BigEndian.PutUint32(v, a)
 	return v
 }
 
 func bytesToUint16(a []byte) (v uint16) {
-	if len(a) != 2 {
-		panic("invalid input")
-	}
-
-	v = uint16(a[0])<<8 | uint16(a[1])
-	return
+	return binary.BigEndian.Uint16(a)
 }
 
 func bytesToUint32(a []byte) (v uint32) {
-	if len(a) != 4 {
-		panic("invalid input")
-	}
-	v = uint32(a[0])<<24 | uint32(a[1])<<16 | uint32(a[2])<<8 | uint32(a[3])
-	return
+	return binary.BigEndian.Uint32(a)
 }
 
 func intToByte(a int) byte {
