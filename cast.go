@@ -22,18 +22,6 @@ func fixTofloat32(a uint16) float32 {
 	return -(float32(^a) + 1) / 256.0
 }
 
-func uint16ToBytes(a uint16) []byte {
-	v := make([]byte, 2)
-	binary.BigEndian.PutUint16(v, a)
-	return v
-}
-
-func uint32ToBytes(a uint32) []byte {
-	v := make([]byte, 4)
-	binary.BigEndian.PutUint32(v, a)
-	return v
-}
-
 func bytesToUint16(a []byte) (v uint16) {
 	return binary.BigEndian.Uint16(a)
 }

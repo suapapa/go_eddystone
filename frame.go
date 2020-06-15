@@ -5,6 +5,7 @@
 package eddystone
 
 import (
+	"encoding/binary"
 	"encoding/hex"
 	"fmt"
 )
@@ -57,16 +58,15 @@ func MakeURLFrame(url string, txPwr int) (Frame, error) {
 // MakeTLMFrame makes Eddystone-TLM frame
 // https://github.com/google/eddystone/tree/master/eddystone-tlm
 func MakeTLMFrame(batt uint16, temp float32, advCnt, secCnt uint32) (Frame, error) {
-	f := make(Frame, 2, 14)
+	f := make(Frame, 14)
 	f[0] = byte(ftTLM)
 	f[1] = 0x00 // TLM version
 
 	// TODO: check min mix for each items
-
-	f = append(f, uint16ToBytes(batt)...)
-	f = append(f, uint16ToBytes(float32ToFix(temp))...)
-	f = append(f, uint32ToBytes(advCnt)...)
-	f = append(f, uint32ToBytes(secCnt)...)
+	binary.BigEndian.PutUint16(f[2:4], batt)
+	binary.BigEndian.PutUint16(f[4:6], float32ToFix(temp))
+	binary.BigEndian.PutUint32(f[6:10], advCnt)
+	binary.BigEndian.PutUint32(f[10:14], secCnt)
 
 	return f, nil
 }
