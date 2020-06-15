@@ -16,7 +16,7 @@ func TestMakeUIDFrame(t *testing.T) {
 	}
 
 	expect := []byte{
-		0, // ftUID
+		0, // hdrUID
 		intToByte(-30),
 		0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a,
 		0x00, 0x00, 0x00, 0x12, 0x34, 0x56,
@@ -36,7 +36,7 @@ func TestMakeURLFrame(t *testing.T) {
 	}
 
 	expect := []byte{
-		0x10, // ftURL
+		0x10, // hdrURL
 		intToByte(-20),
 		0x02, // URL Scheme Prefix: http://
 		'g',  // 'g'
@@ -60,7 +60,7 @@ func TestMakeTLMFrame(t *testing.T) {
 	}
 
 	expect := []byte{
-		0x20, // ftTLM
+		0x20, // hdrTLM
 		0x00,
 		0x00,
 		0x32,

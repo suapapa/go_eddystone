@@ -10,23 +10,22 @@ import (
 	"testing"
 )
 
-func TestParseType(t *testing.T) {
-
-	frames := []byte{byte(ftUID)}
-	ftype := ParseType(frames)
-	if ftype != TypeUID {
+func TestParseHeader(t *testing.T) {
+	frames := []byte{byte(UID)}
+	hdr := ParseHeader(frames)
+	if hdr != UID {
 		t.Fatal("Expected type is UID")
 	}
 
-	frames = []byte{byte(ftTLM)}
-	ftype = ParseType(frames)
-	if ftype != TypeTLM {
+	frames = []byte{byte(TLM)}
+	hdr = ParseHeader(frames)
+	if hdr != TLM {
 		t.Fatal("Expected type is TLM")
 	}
 
-	frames = []byte{byte(ftURL)}
-	ftype = ParseType(frames)
-	if ftype != TypeURL {
+	frames = []byte{byte(URL)}
+	hdr = ParseHeader(frames)
+	if hdr != URL {
 		t.Fatal("Expected type is URL")
 	}
 

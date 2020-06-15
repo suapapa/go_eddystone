@@ -9,31 +9,9 @@ import (
 	"encoding/hex"
 )
 
-// Type represents type of Eddystone frame
-type Type string
-
-const (
-	// TypeUnknown means it may not Eddystone frame
-	TypeUnknown Type = ""
-	// TypeUID means UID frame
-	TypeUID = "uid"
-	// TypeURL means URL frame
-	TypeURL = "url"
-	// TypeTLM means TLM frame
-	TypeTLM = "tlm"
-)
-
-// ParseType returns type of Eddystone frame
-func ParseType(frames []byte) Type {
-	switch frameType(frames[0]) {
-	case ftUID:
-		return TypeUID
-	case ftURL:
-		return TypeURL
-	case ftTLM:
-		return TypeTLM
-	}
-	return TypeUnknown
+// ParseHeader returns type of Eddystone frame
+func ParseHeader(frames []byte) Header {
+	return Header(frames[0])
 }
 
 // ParseUIDFrame returns contents of UID frame

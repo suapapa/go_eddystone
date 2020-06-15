@@ -27,7 +27,7 @@ func MakeUIDFrame(namespace, instance string, txPwr int) (Frame, error) {
 	}
 
 	f := make(Frame, 2, 20)
-	f[0] = byte(ftUID)
+	f[0] = byte(UID)
 	f[1] = intToByte(txPwr)
 
 	f = append(f, n...)
@@ -46,7 +46,7 @@ func MakeURLFrame(url string, txPwr int) (Frame, error) {
 	}
 
 	f := make(Frame, 3, 21)
-	f[0] = byte(ftURL)
+	f[0] = byte(URL)
 	f[1] = intToByte(txPwr)
 	f[2] = p
 
@@ -59,7 +59,7 @@ func MakeURLFrame(url string, txPwr int) (Frame, error) {
 // https://github.com/google/eddystone/tree/master/eddystone-tlm
 func MakeTLMFrame(batt uint16, temp float32, advCnt, secCnt uint32) (Frame, error) {
 	f := make(Frame, 14)
-	f[0] = byte(ftTLM)
+	f[0] = byte(TLM)
 	f[1] = 0x00 // TLM version
 
 	// TODO: check min mix for each items
@@ -77,12 +77,12 @@ func MakeFrame(r []byte) (Frame, error) {
 		return nil, ErrInvalidFrame
 	}
 
-	switch frameType(r[0]) {
-	case ftUID:
+	switch Header(r[0]) {
+	case UID:
 		if len(r) < 18 {
 			return nil, ErrInvalidFrame
 		}
-	case ftURL:
+	case URL:
 		if len(r) < 4 {
 			return nil, ErrInvalidFrame
 		}
@@ -90,7 +90,7 @@ func MakeFrame(r []byte) (Frame, error) {
 			return nil, err
 		}
 
-	case ftTLM:
+	case TLM:
 		if len(r) != 14 {
 			return nil, ErrInvalidFrame
 		}
@@ -100,17 +100,17 @@ func MakeFrame(r []byte) (Frame, error) {
 }
 
 func (f Frame) String() string {
-	t := frameType(f[0])
+	t := Header(f[0])
 
 	switch t {
-	case ftUID:
+	case UID:
 		return fmt.Sprintf("%s[Namespace:0x%s Instance:0x%s TxPwr:%ddBm]",
 			t,
 			hex.EncodeToString(f[2:2+10]),
 			hex.EncodeToString(f[12:12+6]),
 			byteToInt(f[1]),
 		)
-	case ftURL:
+	case URL:
 		url, err := decodeURL(f[2], f[3:])
 		if err != nil {
 			panic(err)
@@ -120,7 +120,7 @@ func (f Frame) String() string {
 			url,
 			byteToInt(f[1]),
 		)
-	case ftTLM:
+	case TLM:
 		return fmt.Sprintf("%s[batt:%d temp:%f, advCnt:%d secCnt:%d]",
 			t,
 			binary.BigEndian.Uint16(f[2:2+2]),
