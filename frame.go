@@ -1,4 +1,4 @@
-// Copyright 2015, Homin Lee <homin.lee@suapapa.net>. All rights reserved.
+// Copyright (c) 2015-2020, go_eddystone authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -63,10 +63,10 @@ func MakeTLMFrame(batt uint16, temp float32, advCnt, secCnt uint32) (Frame, erro
 	f[1] = 0x00 // TLM version
 
 	// TODO: check min mix for each items
-	binary.BigEndian.PutUint16(f[2:4], batt)
-	binary.BigEndian.PutUint16(f[4:6], float32ToFix(temp))
-	binary.BigEndian.PutUint32(f[6:10], advCnt)
-	binary.BigEndian.PutUint32(f[10:14], secCnt)
+	binary.BigEndian.PutUint16(f[2:2+2], batt)
+	binary.BigEndian.PutUint16(f[4:4+2], float32ToFix(temp))
+	binary.BigEndian.PutUint32(f[6:6+4], advCnt)
+	binary.BigEndian.PutUint32(f[10:10+4], secCnt)
 
 	return f, nil
 }

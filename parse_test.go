@@ -1,3 +1,7 @@
+// Copyright (c) 2015-2020, go_eddystone authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
 package eddystone
 
 import (
@@ -10,19 +14,19 @@ func TestParseType(t *testing.T) {
 
 	frames := []byte{byte(ftUID)}
 	ftype := ParseType(frames)
-	if ftype != EddystoneTypeUID {
+	if ftype != TypeUID {
 		t.Fatal("Expected type is UID")
 	}
 
 	frames = []byte{byte(ftTLM)}
 	ftype = ParseType(frames)
-	if ftype != EddystoneTypeTLM {
+	if ftype != TypeTLM {
 		t.Fatal("Expected type is TLM")
 	}
 
 	frames = []byte{byte(ftURL)}
 	ftype = ParseType(frames)
-	if ftype != EddystoneTypeURL {
+	if ftype != TypeURL {
 		t.Fatal("Expected type is URL")
 	}
 
@@ -80,7 +84,6 @@ func TestParseTLMFrame(t *testing.T) {
 }
 
 func TestParseURLFrame(t *testing.T) {
-
 	url := "https://example.com"
 	txPwr := 99
 

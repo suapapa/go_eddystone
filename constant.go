@@ -1,4 +1,4 @@
-// Copyright 2015, Homin Lee <homin.lee@suapapa.net>. All rights reserved.
+// Copyright (c) 2015-2020, go_eddystone authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -6,10 +6,10 @@ package eddystone
 
 import "errors"
 
-// Eddystone Service UUID
+// SvcUUID is Eddystone service UUID
 const SvcUUID = 0xFEAA
 
-// Eddystone Service UUID in Little Endian format
+// SvcUUIDBytes is Eddystone service UUID in Little Endian format
 var SvcUUIDBytes = []byte{0xAA, 0xFE}
 
 // ErrInvalidFrame can be returned from Make*Frame()

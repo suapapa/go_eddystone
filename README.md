@@ -12,13 +12,14 @@ This package covers [Eddystone-UID][1], [Eddystone-URL][2], [Eddystone-TLM][3] f
 ## Example
 Checkout `example/beacon.go` for using this package with [gatt][4] to make a Eddystone beacon in Golang.
 
-## Author
+## Authors
 
-Homin Lee &lt;homin.lee@suapapa.net&gt;
+* Homin Lee &lt;homin.lee@suapapa.net&gt;
+* Luca Capra &lt;luca.capra@gmail.com&gt;
 
 ## Copyright & License
 
-Copyright (c) 2015, Homin Lee.
+Copyright (c) 2015-2020, go_eddystone authors.
 All rights reserved.
 Use of this source code is governed by a BSD-style license that can be
 found in the LICENSE file.
