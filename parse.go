@@ -38,3 +38,5 @@ func ParseTLMFrame(f []byte) (batt uint16, temp float32, advCnt uint32, secCnt u
 		binary.BigEndian.Uint32(f[6 : 6+4]),
 		binary.BigEndian.Uint32(f[10 : 10+4])
 }
+
+// TODO: ParseEIDFrame

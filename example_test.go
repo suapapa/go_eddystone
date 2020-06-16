@@ -34,9 +34,9 @@ func ExampleMakeTLMFrame() {
 	// [32 0 12 228 23 128 0 0 0 1 0 0 0 2]
 }
 
-func ExampleMakeEIDFrame() {
-	eid, _ := eddystone.ComputingEIDValue([]byte("0123456789abcdef"), 0x12345678, 8)
-	f, _ := eddystone.MakeEIDFrame(eid, -30)
+func ExampleMakeEIDFrameFromBytes() {
+	eid, _ := eddystone.ComputeEIDValue([]byte("0123456789abcdef"), 0x12345678, 8)
+	f, _ := eddystone.MakeEIDFrameFromBytes(eid, -30)
 	fmt.Println(f)
 	fmt.Println([]byte(f))
 	// EID[EphemetalIdentifier:0xb846453b3c9e7b59 TxPwr:-30dBm]

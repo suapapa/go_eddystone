@@ -37,6 +37,27 @@ func MakeUIDFrame(namespace, instance string, txPwr int) (Frame, error) {
 	return f, nil
 }
 
+// MakeUIDFrameFromBytes makes Eddystone-UID frame from namespace and instance bytes
+// https://github.com/google/eddystone/tree/master/eddystone-uid
+func MakeUIDFrameFromBytes(namespace, instance []byte, txPwr int) (Frame, error) {
+	if len(namespace) != 10 {
+		return nil, fmt.Errorf("namespace should be length of 10")
+	}
+	if len(instance) != 6 {
+		return nil, fmt.Errorf("instance should be length of 10")
+	}
+
+	f := make(Frame, 2, 20)
+	f[0] = byte(UID)
+	f[1] = intToByte(txPwr)
+
+	f = append(f, namespace...)
+	f = append(f, instance...)
+	f = append(f, 0x00, 0x00)
+
+	return f, nil
+}
+
 // MakeURLFrame makes Eddystone-URL frame
 // https://github.com/google/eddystone/tree/master/eddystone-url
 func MakeURLFrame(url string, txPwr int) (Frame, error) {
@@ -71,14 +92,15 @@ func MakeTLMFrame(batt uint16, temp float32, advCnt, secCnt uint32) (Frame, erro
 	return f, nil
 }
 
-// MakeEIDFrame makes Eddystone-EID frame
+// MakeEIDFrameFromBytes makes Eddystone-EID frame from EID bytes
 // https://github.com/google/eddystone/tree/master/eddystone-eid
-func MakeEIDFrame(eid []byte, txPwr int) (Frame, error) {
+func MakeEIDFrameFromBytes(eid []byte, txPwr int) (Frame, error) {
 	if len(eid) != 8 {
-		return nil, ErrInvalidData
+		return nil, fmt.Errorf("eid should be length of 8")
 	}
-	f := []byte{byte(EID)}
-	f = append(f, intToByte(txPwr))
+	f := make(Frame, 2, 10)
+	f[0] = byte(EID)
+	f[1] = intToByte(txPwr)
 	return append(f, eid...), nil
 }
 

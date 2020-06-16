@@ -4,21 +4,12 @@
 
 package eddystone
 
-import (
-	"fmt"
-)
-
 // SvcUUID is Eddystone service UUID
 const SvcUUID = 0xFEAA
 
 var (
 	// SvcUUIDBytes is Eddystone service UUID in Little Endian format
 	SvcUUIDBytes = []byte{0xAA, 0xFE}
-
-	// ErrInvalidFrame can be returned from Make*Frame()
-	ErrInvalidFrame = fmt.Errorf("invalid frame")
-	// ErrInvalidData can be returend if given data for Make*Fame() is invalid
-	ErrInvalidData = fmt.Errorf("invalid data")
 )
 
 // Header for Eddystone frames
@@ -35,7 +26,7 @@ func (hdr Header) String() string {
 	case EID:
 		return "EID"
 	}
-	return "Invaild Frame"
+	return "Unknown"
 }
 
 // Eddystone frame types

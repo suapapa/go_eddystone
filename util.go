@@ -10,9 +10,9 @@ import (
 	"fmt"
 )
 
-// ComputingEIDValue returns 8 bytes EID value
+// ComputeEIDValue returns 8 bytes EID value
 // https://github.com/google/eddystone/blob/master/eddystone-eid/eid-computation.md
-func ComputingEIDValue(identityKey []byte, ts uint32, k byte) (eid []byte, err error) {
+func ComputeEIDValue(identityKey []byte, ts uint32, k byte) (eid []byte, err error) {
 	if len(identityKey) != 16 {
 		return nil, fmt.Errorf("identityKey should be 16byte length for AES-128")
 	}
