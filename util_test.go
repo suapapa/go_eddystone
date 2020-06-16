@@ -4,7 +4,26 @@
 
 package eddystone
 
-import "testing"
+import (
+	"bytes"
+	"testing"
+)
+
+func TestConstructNSByTracatedHash(t *testing.T) {
+	expect := []byte{228, 27, 42, 224, 106, 114, 155, 150, 228, 185}
+	got := ConstructNSByTruncatedHash("kakaoenterprise.com")
+	if !bytes.Equal(expect, got) {
+		t.Errorf("expect %v got %v", expect, got)
+	}
+}
+
+func TestConsturctNSByElidedUUID(t *testing.T) {
+	a := ConstructNSByElidedUUID()
+	b := ConstructNSByElidedUUID()
+	if bytes.Equal(a, b) {
+		t.Errorf("it sholudnt be same")
+	}
+}
 
 func TestMakeTsMask(t *testing.T) {
 	expect := uint32(0xFFFFFFFF)

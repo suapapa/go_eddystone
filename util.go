@@ -6,9 +6,32 @@ package eddystone
 
 import (
 	"crypto/aes"
+	"crypto/sha1"
 	"encoding/binary"
+	"encoding/hex"
 	"fmt"
+	"strings"
+
+	"github.com/google/uuid"
 )
+
+// ConstructNSByTruncatedHash return 10 bytes namespace for UID frame
+// by traucated hash of FQDN
+func ConstructNSByTruncatedHash(fqdn string) []byte {
+	h := sha1.New()
+	h.Write([]byte(fqdn))
+	bs := h.Sum(nil)
+	return bs[:10]
+}
+
+// ConstructNSByElidedUUID return 10 bytes namespace for UID frame
+// by elided version 4 UUID
+func ConstructNSByElidedUUID() []byte {
+	id := uuid.New().String()
+	id = strings.Replace(id, "-", "", -1)
+	uuidBytes, _ := hex.DecodeString(id)
+	return append(uuidBytes[:5], uuidBytes[11:]...)
+}
 
 // ComputeEIDValue returns 8 bytes EID value
 // https://github.com/google/eddystone/blob/master/eddystone-eid/eid-computation.md
