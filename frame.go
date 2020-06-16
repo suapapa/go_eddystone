@@ -71,32 +71,15 @@ func MakeTLMFrame(batt uint16, temp float32, advCnt, secCnt uint32) (Frame, erro
 	return f, nil
 }
 
-// MakeFrame convert []byte to eddystone.Frame
-func MakeFrame(r []byte) (Frame, error) {
-	if len(r) < 2 {
-		return nil, ErrInvalidFrame
+// MakeEIDFrame makes Eddystone-EID frame
+// https://github.com/google/eddystone/tree/master/eddystone-eid
+func MakeEIDFrame(eid []byte, txPwr int) (Frame, error) {
+	if len(eid) != 8 {
+		return nil, ErrInvalidData
 	}
-
-	switch Header(r[0]) {
-	case UID:
-		if len(r) < 18 {
-			return nil, ErrInvalidFrame
-		}
-	case URL:
-		if len(r) < 4 {
-			return nil, ErrInvalidFrame
-		}
-		if _, err := decodeURL(r[2], r[3:]); err != nil {
-			return nil, err
-		}
-
-	case TLM:
-		if len(r) != 14 {
-			return nil, ErrInvalidFrame
-		}
-	}
-
-	return Frame(r), nil
+	f := []byte{byte(EID)}
+	f = append(f, intToByte(txPwr))
+	return append(f, eid...), nil
 }
 
 func (f Frame) String() string {
@@ -127,6 +110,12 @@ func (f Frame) String() string {
 			fixTofloat32(binary.BigEndian.Uint16(f[4:4+2])),
 			binary.BigEndian.Uint32(f[6:6+4]),
 			binary.BigEndian.Uint32(f[10:10+4]),
+		)
+	case EID:
+		return fmt.Sprintf("%s[EphemetalIdentifier:0x%s TxPwr:%ddBm]",
+			t,
+			hex.EncodeToString(f[2:2+8]),
+			byteToInt(f[1]),
 		)
 	}
 
