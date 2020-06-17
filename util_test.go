@@ -6,22 +6,26 @@ package eddystone
 
 import (
 	"bytes"
+	"encoding/hex"
 	"testing"
+
+	"github.com/google/uuid"
 )
 
-func TestConstructNSByTracatedHash(t *testing.T) {
+func TestConstructNSByTracatedHashFQDN(t *testing.T) {
 	expect := []byte{228, 27, 42, 224, 106, 114, 155, 150, 228, 185}
-	got := ConstructNSByTruncatedHash("kakaoenterprise.com")
+	got := ConstructNSByTruncatedHashFQDN("kakaoenterprise.com")
 	if !bytes.Equal(expect, got) {
 		t.Errorf("expect %v got %v", expect, got)
 	}
 }
 
 func TestConsturctNSByElidedUUID(t *testing.T) {
-	a := ConstructNSByElidedUUID()
-	b := ConstructNSByElidedUUID()
-	if bytes.Equal(a, b) {
-		t.Errorf("it sholudnt be same")
+	expect, _ := hex.DecodeString("8b0ca750095477cb3e77")
+	id, _ := uuid.Parse("8b0ca750-e7a7-4e14-bd99-095477cb3e77")
+	got := ConstructNSByElidedUUID(id)
+	if !bytes.Equal(expect, got) {
+		t.Errorf("expect %v got %v", expect, got)
 	}
 }
 

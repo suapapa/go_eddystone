@@ -15,9 +15,9 @@ import (
 	"github.com/google/uuid"
 )
 
-// ConstructNSByTruncatedHash return 10 bytes namespace for UID frame
+// ConstructNSByTruncatedHashFQDN return 10 bytes namespace for UID frame
 // by traucated hash of FQDN
-func ConstructNSByTruncatedHash(fqdn string) []byte {
+func ConstructNSByTruncatedHashFQDN(fqdn string) []byte {
 	h := sha1.New()
 	h.Write([]byte(fqdn))
 	bs := h.Sum(nil)
@@ -26,11 +26,11 @@ func ConstructNSByTruncatedHash(fqdn string) []byte {
 
 // ConstructNSByElidedUUID return 10 bytes namespace for UID frame
 // by elided version 4 UUID
-func ConstructNSByElidedUUID() []byte {
-	id := uuid.New().String()
-	id = strings.Replace(id, "-", "", -1)
-	uuidBytes, _ := hex.DecodeString(id)
-	return append(uuidBytes[:5], uuidBytes[11:]...)
+func ConstructNSByElidedUUID(id uuid.UUID) []byte {
+	idStr := id.String()
+	idStr = strings.Replace(idStr, "-", "", -1)
+	uuidBytes, _ := hex.DecodeString(idStr)
+	return append(uuidBytes[:4], uuidBytes[10:]...)
 }
 
 // ComputeEIDValue returns 8 bytes EID value
